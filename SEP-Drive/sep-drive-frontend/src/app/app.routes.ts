@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { UserSearchComponent} from './components/user-search/user-search.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import {PublicProfileComponent} from './components/public-profile/public-profile.component';
+import { AccountComponent } from './components/account/account.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -23,4 +24,5 @@ export const routes: Routes = [
   { path: 'request-ride', component: RideRequestFormComponent, canActivate: [authGuard] },
   { path: 'user-search', component: UserSearchComponent, canActivate: [authGuard], title: 'SEP-Drive - Benutzer suchen' },
   { path: 'profile/:username', component: PublicProfileComponent, canActivate: [authGuard] },
+  {path: 'account', component: AccountComponent, canActivate: [authGuard], title: 'SEP-Drive - Mein Konto'},
 ];

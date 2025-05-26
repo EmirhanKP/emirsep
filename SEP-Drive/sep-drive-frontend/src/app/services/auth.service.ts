@@ -40,9 +40,13 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('tokenType');
-    console.log('User logged out, token removed.');
-    this.router.navigate(['/login']);
-  }
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('tokenType');
+  localStorage.removeItem('userRole');
+  localStorage.removeItem('username');
+  localStorage.removeItem('profileImageUrl');
+  this.router.navigate(['/login']);
+}
+
+
 }

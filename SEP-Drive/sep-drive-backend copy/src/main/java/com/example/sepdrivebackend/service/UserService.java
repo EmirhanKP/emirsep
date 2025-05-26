@@ -71,6 +71,7 @@ public class UserService implements UserDetailsService {
         user.setEmail(dto.getEmail());
         user.setBirthDate(dto.getBirthDate());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setAccountBalance(0.0);
 
         // NEU: Setze die vehicleClass, wenn die Rolle "DRIVER" ist
         if ("DRIVER".equalsIgnoreCase(dto.getRole())) {
@@ -138,6 +139,25 @@ public class UserService implements UserDetailsService {
                 List.of(new SimpleGrantedAuthority(role))
         );
     }
+
+    @Transactional
+    public UserProfileDto addFunds(Long userId, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Der Betrag muss größer als 0 sein.");
+        }
+        User user = userRepository.findById(userId).orElseThrow(()-> new UsernameNotFoundException("Der Benutzer mit der ID:" + userId + " konnte nicht gefunden werden"));
+        user.setAccountBalance(user.getAccountBalance() + amount);
+        User savedUser = userRepository.save(user);
+        return UserProfileDto.fromEntity(savedUser);
+    }
+
+    @Transactional
+    public double getAccountBalance(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("Der Benutzer mit der ID:" + userId + " konnte nicht gefunden werden"));
+        return user.getAccountBalance();
+    }
+
+    //fügt hier bitte die methoden für die bezahlung der fahrten rein jungs.
 
     private static class TwoFactorAuthDetail {
         final String code;

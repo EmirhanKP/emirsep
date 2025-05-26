@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.Instant;
 import java.util.Base64;
 
-@Data // Generiert automatisch Getter, Setter, toString, equals, hashCode
+@Data 
 public class UserProfileDto {
 
     private Long id;
@@ -25,6 +25,7 @@ public class UserProfileDto {
     private Integer totalRides;       // Anzahl Fahrten (int)
     private String role;
     private String vehicleClass;
+    private Double accountBalance; // NEUES FELD
 
     public UserProfileDto() {
 
@@ -37,7 +38,7 @@ public class UserProfileDto {
         this.lastName = lastName;
     }
 
-    // Optional: Statische Methode zum einfachen Erstellen aus User-Entity
+    
     public static UserProfileDto fromEntity(User user) {
         UserProfileDto dto = new UserProfileDto();
         dto.setId(user.getId());
@@ -46,17 +47,17 @@ public class UserProfileDto {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setBirthDate(user.getBirthDate());
-        // Stelle sicher, dass der Typ hier zu deiner Felddefinition passt (Instant oder String)
-        dto.setCreatedAt(user.getCreatedAt());
+        dto.setCreatedAt(user.getCreatedAt()); // Stelle sicher, dass der Typ hier zu deiner Felddefinition passt (Instant oder String)
 
-        // --- HIER DIE NEUEN FELDER HINZUFÜGEN ---
         if (user.getProfilePicture() != null && user.getProfileImageContentType() != null) {
             String base64 = Base64.getEncoder().encodeToString(user.getProfilePicture());
             String imageData = "data:" + user.getProfileImageContentType() + ";base64," + base64;
             dto.setProfilePictureUrl(imageData);
         }
-        dto.setRating(user.getRating());                       // Übernimmt den double-Wert
-        dto.setTotalRides(user.getTotalRides());             // Übernimmt den int-Wert
+        dto.setRating(user.getRating());
+        dto.setTotalRides(user.getTotalRides());
+        dto.setRole(user.getRole());
+        dto.setAccountBalance(user.getAccountBalance()); 
 
         if (user.getVehicleClass() != null) {
             dto.setVehicleClass(user.getVehicleClass());

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { Verify2FARequestDto } from '../../models/verify-2fa-request-dto.model';
 import { Verify2FAResponseDto } from '../../models/verify-2fa-response-dto.model';
@@ -13,7 +13,7 @@ import { Verify2FAResponseDto } from '../../models/verify-2fa-response-dto.model
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './verify-2fa.component.html',
   styleUrl: './verify-2fa.component.scss'
@@ -27,6 +27,7 @@ export class Verify2faComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -73,10 +74,21 @@ export class Verify2faComponent implements OnInit {
         localStorage.setItem('authToken', response.accessToken);
         localStorage.setItem('tokenType', response.tokenType);
 
-        alert('Login erfolgreich! Token erhalten:\n' + response.accessToken);
+        //alert('Login erfolgreich! Token erhalten:\n' + response.accessToken);
 
 
-        this.router.navigate(['/home']); //TODO Path öndern! Homeseite?
+        this.userService.getMyProfile().subscribe( {
+          next: (profile) => {
+            this.router.navigate(['/home']); //TODO Path öndern! Homeseite?
+          },
+          error:(err) => {
+            alert('Fehler beim Laden des Profils. Bitte erneut einloggen.');
+            this.router.navigate(['/login']);
+
+          }
+        });
+
+
       },
       error: (errorResponse) => {
 

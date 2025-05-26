@@ -10,7 +10,6 @@ import {tap, catchError, switchMap} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../services/user.service';
 import { UserProfile } from '../../models/user-profile.model';
-import {map} from 'leaflet';
 import {ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
@@ -75,9 +74,8 @@ export class ProfileComponent implements OnInit {
    * Gibt die korrekte Bild-URL für das Template zurück.
    */
   getProfilePicUrl(profile: UserProfile | null): string {
-    console.log('Profilbild-URL:', profile?.profilePictureUrl);
-    return profile?.profilePictureUrl || this.defaultProfilePic;
-  }
+  return profile?.profilePictureUrl ? profile.profilePictureUrl : 'assets/default-profile.png';
+}
 
   /**
    * Wird aufgerufen, wenn der Benutzer eine neue Datei auswählt.
@@ -124,7 +122,9 @@ export class ProfileComponent implements OnInit {
         console.log('Upload erfolgreich, lade Profil neu...');
         this.errorMessage = null;
 
-        this.loadProfile(); // Lädt Profil neu -> getProfilePicUrl wird neu aufgerufen
+        this.loadProfile();
+        this.userService.refreshProfile();
+        window.location.reload(); // Lädt Profil neu -> getProfilePicUrl wird neu aufgerufen
       },
       error: err => {
         console.error('Upload fehlgeschlagen:', err);
@@ -135,19 +135,20 @@ export class ProfileComponent implements OnInit {
   /**
    * Setzt das Profilbild wieder aufs Standard zurück
    */
-  resetProfilePicture(): void {
-    this.userProfile$.subscribe(profile => {
-      if (!profile) return;
+ resetProfilePicture(): void {
+  this.userProfile$.subscribe(profile => {
+    if (!profile) return;
 
-      this.http.post(`/api/users/${profile.id}/reset-profileImage`, {}).subscribe({
-        next: () => {
-          // Lade das Profil neu, damit das Standardbild angezeigt wird
-          this.userProfile$ = this.userService.getMyProfile();
-        },
-        error: err => {
-          console.error('Fehler beim Zurücksetzen des Profilbilds:', err);
-        }
-      });
+    this.http.post(`/api/users/${profile.id}/reset-profileImage`, {}).subscribe({
+      next: () => {
+        // Lade das Profil neu, damit das Standardbild angezeigt wird
+        this.loadProfile();
+        window.location.reload();
+      },
+      error: err => {
+        console.error('Fehler beim Zurücksetzen des Profilbilds:', err);
+      }
     });
-  }
+  });
+}
 }

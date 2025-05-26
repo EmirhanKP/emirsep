@@ -1,6 +1,4 @@
-/* src/app/app.component.scss */
 
-/* Basis-Layout für die App */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -149,4 +147,28 @@
   border-top: 1px solid #dee2e6;
   font-size: 0.9em;
   color: #6c757d;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-right: 8px;
+  transition: background 0.2s;
+  cursor: pointer;
+
+  svg {
+    display: block;
+  }
+
+  &:hover, &:focus {
+    background: rgba(199, 34, 144, 0.12);
+    outline: none;
+  }
 }

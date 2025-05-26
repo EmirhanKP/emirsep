@@ -16,4 +16,5 @@ export interface UserProfile {
   totalRides?: number;             // Anzahl der absolvierten Fahrten
   vehicleClass?: string;           // Auto klasse des Fahrers
   role: 'CUSTOMER' | 'DRIVER';
+  accountBalance?: number;
 }

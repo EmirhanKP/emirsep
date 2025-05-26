@@ -20,6 +20,7 @@ import { LoginResponseDto } from '../../models/login-response-dto.model';
 })
 export class LoginComponent implements OnInit {
 
+
   loginForm!: FormGroup;
   errorMessage: string | null = null;
 
@@ -34,6 +35,7 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required]]
     });
   }
+
   onSubmit(): void {
     this.errorMessage = null;
 

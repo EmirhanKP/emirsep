@@ -72,9 +72,12 @@ public class User {
     @Column(nullable = true)
     private String vehicleClass;
 
+
+    @Column(nullable = false, columnDefinition = "DOUBLE PRECISION DEFAULT 0.0")
+    private double accountBalance = 0.0;
+
+    
     @Column(nullable = true)
-
-
     private double rating = 0.0;
 
     private int totalRides = 0;

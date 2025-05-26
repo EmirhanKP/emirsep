@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink}  from '@angular/router';
-
+import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -14,12 +14,13 @@ export class HomeComponent implements OnInit {
   isDriver: boolean = false;
   username: string = 'Benutzer';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
 
   ngOnInit() {
-    this.isCustomer = true;
-    this.isDriver = false;
-    this.username = 'TestBenutzer';
+    const role = localStorage.getItem('userRole');
+    this.isDriver = role === 'DRIVER';
+    this.isCustomer = role === 'CUSTOMER';
+    this.username = localStorage.getItem('username') ?? 'Benutzer';
   }
 
   createRideRequest() {
@@ -30,9 +31,14 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/profile']);
   }
   logout() {
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('username');
     this.router.navigate(['/login']);
   }
   searchUsers() {
     this.router.navigate(['/search'])
+  }
+  account() {
+    this.router.navigate(['/account']);
   }
 }
